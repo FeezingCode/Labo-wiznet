@@ -21,3 +21,21 @@
 *.i*86
 *.x86_64
 *.hex
+
+#MPLAB X
+*.xml
+*.mk
+*.bash
+*.properties
+*.cmf
+*.hxl
+*.lst
+*.map
+*.rlf
+*.sdb
+*.sym
+*.p1
+*.pre
+*.d
+funclist
+Makefile
