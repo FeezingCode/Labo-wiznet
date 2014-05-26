@@ -25,25 +25,25 @@
 #define SOCKET_TCP      0
 #define SOCKET_UDP      1
 
-#define BUFFER_SIZE     2048
+#define BUFFER_SIZE     1024
 
 #pragma config  OSC = INTIO67, BOREN = OFF, PWRT = ON
 #pragma config  WDT = OFF, DEBUG = ON, LVP = OFF
 
-intr_kind wiznet_interrupt = 0;
-char wiznet_interrupt_flag = 0;
-const uint8_t network_ip[] = {192, 168, 1, 204};
-const uint8_t network_gw[] = {192, 168, 1, 1};
-const uint8_t network_dns[] = {8, 8, 8, 8};
-const uint8_t network_sn[] = {255, 255, 255, 0};
-const uint8_t network_mac[] = {0x36, 0x8A, 0xB6, 0x89, 0x90, 0x87};
+//intr_kind wiznet_interrupt = 0;
+//char wiznet_interrupt_flag = 0;
+//const uint8_t network_ip[] = {192, 168, 1, 204};
+//const uint8_t network_gw[] = {192, 168, 1, 1};
+//const uint8_t network_dns[] = {8, 8, 8, 8};
+//const uint8_t network_sn[] = {255, 255, 255, 0};
+//const uint8_t network_mac[] = {0x36, 0x8A, 0xB6, 0x89, 0x90, 0x87};
 uint8_t memsize[2][8] = {
     {2, 2, 2, 2, 2, 2, 2, 2},
     {2, 2, 2, 2, 2, 2, 2, 2}
 };
 char init_error = 0;
 char phy_link_status = 0;
-uint8_t network_id[6] = {0};
+//uint8_t network_id[6] = {0};
 uint8_t buffer[BUFFER_SIZE];
 wiz_NetInfo networkConfig = {
     {0x36, 0x8A, 0xB6, 0x89, 0x90, 0x87},
@@ -63,12 +63,12 @@ void spi_writebyte(uint8_t wb);
 void send_UDP_test();
 void send_TCP_test();
 
-void interrupt ISR() {
-    if (INT0IF == 1) {
-        INT0IF = 0;
-        wiznet_interrupt = wizchip_getinterrupt();
-    }
-}
+//void interrupt ISR() {
+//    if (INT0IF == 1) {
+//        INT0IF = 0;
+//        wiznet_interrupt = wizchip_getinterrupt();
+//    }
+//}
 
 int main(int argc, char** argv) {
     OSCCON = 0b01110010;
@@ -83,15 +83,15 @@ int main(int argc, char** argv) {
 //    GIE = 1;
     reg_wizchip_cs_cbfunc(cs_select, cs_deselect);
     reg_wizchip_spi_cbfunc(spi_readbyte, spi_writebyte);
-    if (ctlwizchip(CW_INIT_WIZCHIP, (void*) memsize) == -1) {
+    if (ctlwizchip(CW_INIT_WIZCHIP, (void*) memsize) == -1) { //Initialisation et verification du module WIZNET
         init_error = 1;
     }
-    do {
+    do { //Attente de la connexion physique
         if (ctlwizchip(CW_GET_PHYLINK, (void*) &phy_link_status) == -1);
     } while (phy_link_status == PHY_LINK_OFF);
     ctlnetwork(CN_SET_NETINFO, (void*) &networkConfig);
-    ctlnetwork(CN_GET_NETINFO, (void*) &networkConfig);
-    ctlwizchip(CW_GET_ID, (void*) network_id);
+//    ctlnetwork(CN_GET_NETINFO, (void*) &networkConfig);
+//    ctlwizchip(CW_GET_ID, (void*) network_id);
 
     sprintf(buffer, "Test UDP 1234567890");
     send_UDP_test();
