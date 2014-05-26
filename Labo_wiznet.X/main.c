@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   main.c
  * Author: g.lagrange
  *
@@ -54,8 +54,8 @@ wiz_NetInfo networkConfig = {
     NETINFO_STATIC
 };
 
-void wizchip_cris_enter(void);
-void wizchip_cris_exit(void);
+void cris_enter(void);
+void cris_exit(void);
 void cs_select(void);
 void cs_deselect(void);
 uint8_t spi_readbyte(void);
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
     TRISB = (1 << 0);
     TRISCbits.RC3 = 0; //SCK
     TRISCbits.RC5 = 0; //SDO
-    //    wizchip_cris_enter();
+    //    cris_enter();
     cs_deselect();
     OpenSPI(SPI_FOSC_64, MODE_00, SMPEND);
 //    GIE = 1;
@@ -99,11 +99,11 @@ int main(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
-void wizchip_cris_enter(void) {
+void cris_enter(void) {
     INT0IE = 1;
 }
 
-void wizchip_cris_exit(void) {
+void cris_exit(void) {
     INT0IE = 0;
 }
 
